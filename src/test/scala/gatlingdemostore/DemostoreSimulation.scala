@@ -1,10 +1,11 @@
 package gatlingdemostore
 
 import scala.concurrent.duration._
-
 import io.gatling.core.Predef._
 import io.gatling.http.Predef._
 import io.gatling.jdbc.Predef._
+
+import scala.util.Random
 
 class DemostoreSimulation extends Simulation {
 
@@ -16,6 +17,19 @@ class DemostoreSimulation extends Simulation {
 	val categoryFeeder = csv("data/categoryDetails.csv").random
 	val jsonFeederProducts = jsonFile("data/productDetails.json").random
 	val csvFeederLoginDetails = csv("data/loginDetails.csv").circular
+
+	val rnd = new Random()
+
+	def randomString(length: Int): String = {
+		rnd.alphanumeric.filter(_.isLetter).take(length).mkString
+	}
+
+	val initSession = exec(flushCookieJar)
+		.exec(session => session.set("randomNumber", rnd.nextInt))
+		.exec(session => session.set("customerLoggedIn", false))
+		.exec(session => session.set("cartTotal", 0.00))
+		.exec(addCookie(Cookie("sessionId", randomString(10)).withDomain(domain)))
+		.exec { session => println(session); session }
 
 	object CmsPages {
 		def homepage = {
@@ -110,6 +124,7 @@ class DemostoreSimulation extends Simulation {
 	}
 
 	val scn = scenario("DemostoreSimulation")
+		.exec(initSession)
 		.exec(CmsPages.homepage)
 		.pause(2)
 		.exec(CmsPages.aboutUs)

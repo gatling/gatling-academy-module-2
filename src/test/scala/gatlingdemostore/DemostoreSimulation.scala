@@ -56,6 +56,16 @@ class DemostoreSimulation extends Simulation {
 							.check(css("""div[class='col-8'] div[class='row'] p""").is("${description}"))
 					)
 			}
+
+			def add = {
+				exec(view)
+				.exec(
+					http("Add product to cart")
+						.get("/cart/add/${id}")
+						.check(status.is(200))
+						.check(regex("""items in your cart"""))
+				)
+			}
 		}
 	}
 
@@ -66,10 +76,7 @@ class DemostoreSimulation extends Simulation {
 		.pause(2)
 		.exec(Catalog.Category.view)
 		.pause(2)
-		.exec(Catalog.Product.view)
-		.pause(2)
-		.exec(http("Add Product to Cart")
-			.get("/cart/add/19"))
+		.exec(Catalog.Product.add)
 		.pause(2)
 		.exec(http("View Cart")
 			.get("/cart/view"))

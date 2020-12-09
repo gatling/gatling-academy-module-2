@@ -98,6 +98,15 @@ class DemostoreSimulation extends Simulation {
 					.check(status.is(200))
 			)
 		}
+
+		def completeCheckout = {
+			exec(
+				http("Checkout Cart")
+					.get("/cart/checkout")
+					.check(status.is(200))
+					.check(regex("""Thanks for your order! See you soon!"""))
+			)
+		}
 	}
 
 	val scn = scenario("DemostoreSimulation")
@@ -113,8 +122,7 @@ class DemostoreSimulation extends Simulation {
 		.pause(2)
 		.exec(Customer.login)
 		.pause(2)
-		.exec(http("Checkout")
-			.get("/cart/checkout"))
+		.exec(Checkout.completeCheckout)
 
 	setUp(scn.inject(atOnceUsers(1))).protocols(httpProtocol)
 }

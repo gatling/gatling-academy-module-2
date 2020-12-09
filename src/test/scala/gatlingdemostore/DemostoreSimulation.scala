@@ -69,6 +69,16 @@ class DemostoreSimulation extends Simulation {
 		}
 	}
 
+	object Checkout {
+		def viewCart = {
+			exec(
+				http("Load Cart Page")
+					.get("/cart/view")
+					.check(status.is(200))
+			)
+		}
+	}
+
 	val scn = scenario("DemostoreSimulation")
 		.exec(CmsPages.homepage)
 		.pause(2)
@@ -78,8 +88,7 @@ class DemostoreSimulation extends Simulation {
 		.pause(2)
 		.exec(Catalog.Product.add)
 		.pause(2)
-		.exec(http("View Cart")
-			.get("/cart/view"))
+		.exec(Checkout.viewCart)
 		.pause(2)
 		.exec(http("Login User")
 			.post("/login")

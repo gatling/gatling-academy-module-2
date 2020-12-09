@@ -15,6 +15,7 @@ class DemostoreSimulation extends Simulation {
 
 	val categoryFeeder = csv("data/categoryDetails.csv").random
 	val jsonFeederProducts = jsonFile("data/productDetails.json").random
+	val csvFeederLoginDetails = csv("data/loginDetails.csv").circular
 
 	object CmsPages {
 		def homepage = {
@@ -69,6 +70,26 @@ class DemostoreSimulation extends Simulation {
 		}
 	}
 
+	object Customer {
+		def login = {
+			feed(csvFeederLoginDetails)
+				.exec(
+					http("Load Login Page")
+						.get("/login")
+						.check(status.is(200))
+						.check(regex("""Username:"""))
+				)
+				.exec(
+					http("Customer Login Action")
+						.post("/login")
+						.formParam("_csrf", "${csrfValue}")
+						.formParam("username", "${username}")
+						.formParam("password", "${password}")
+						.check(status.is(200))
+				)
+		}
+	}
+
 	object Checkout {
 		def viewCart = {
 			exec(
@@ -90,11 +111,7 @@ class DemostoreSimulation extends Simulation {
 		.pause(2)
 		.exec(Checkout.viewCart)
 		.pause(2)
-		.exec(http("Login User")
-			.post("/login")
-			.formParam("_csrf", "${csrfValue}")
-			.formParam("username", "user1")
-			.formParam("password", "password1"))
+		.exec(Customer.login)
 		.pause(2)
 		.exec(http("Checkout")
 			.get("/cart/checkout"))

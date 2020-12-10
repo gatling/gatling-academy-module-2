@@ -14,6 +14,16 @@ class DemostoreSimulation extends Simulation {
 	val httpProtocol = http
 		.baseUrl("https://" + domain)
 
+	def userCount: Int = getProperty("USERS", "5").toInt
+	def rampDuration: Int = getProperty("RAMP_DURATION", "10").toInt
+	def testDuration: Int = getProperty("DURATION", "60").toInt
+
+	private def getProperty(propertyName: String, defaultValue: String) = {
+		Option(System.getenv(propertyName))
+			.orElse(Option(System.getProperty(propertyName)))
+			.getOrElse(defaultValue)
+	}
+
 	val categoryFeeder = csv("data/categoryDetails.csv").random
 	val jsonFeederProducts = jsonFile("data/productDetails.json").random
 	val csvFeederLoginDetails = csv("data/loginDetails.csv").circular
@@ -192,7 +202,7 @@ class DemostoreSimulation extends Simulation {
 
 	object Scenarios {
 		def default = scenario("Default Load Test")
-			.during(60 seconds) {
+			.during(testDuration seconds) {
 				randomSwitch(
 					75d -> exec(UserJourneys.browseStore),
 					15d -> exec(UserJourneys.abandonCart),
@@ -210,11 +220,8 @@ class DemostoreSimulation extends Simulation {
 			}
 	}
 
-	setUp(scn.inject(constantUsersPerSec(1) during (3 minutes))).protocols(httpProtocol).throttle(
-		reachRps(10) in (30 seconds),
-		holdFor(60 seconds),
-		jumpToRps(20),
-		holdFor(60 seconds)
-	).maxDuration(3 minutes)
+	setUp(Scenarios.default
+	.inject(rampUsers(userCount) during (rampDuration seconds))
+	.protocols(httpProtocol))
 
 }

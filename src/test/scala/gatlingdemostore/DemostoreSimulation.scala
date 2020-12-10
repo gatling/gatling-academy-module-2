@@ -151,7 +151,7 @@ class DemostoreSimulation extends Simulation {
 		def maxPause = 500 milliseconds
 
 		def browseStore = {
-			exec(initSession).
+			exec(initSession)
 			.exec(CmsPages.homepage)
 				.pause(maxPause)
 				.exec(CmsPages.aboutUs)
@@ -188,6 +188,26 @@ class DemostoreSimulation extends Simulation {
 				.pause(minPause, maxPause)
 				.exec(Checkout.completeCheckout)
 		}
+	}
+
+	object Scenarios {
+		def default = scenario("Default Load Test")
+			.during(60 seconds) {
+				randomSwitch(
+					75d -> exec(UserJourneys.browseStore),
+					15d -> exec(UserJourneys.abandonCart),
+					10d -> exec(UserJourneys.completePurchase)
+				)
+			}
+
+		def highPurchase = scenario("High Purhcase Load Test")
+			.during(60 seconds) {
+				randomSwitch(
+					25d -> exec(UserJourneys.browseStore),
+					25d -> exec(UserJourneys.abandonCart),
+					50d -> exec(UserJourneys.completePurchase)
+				)
+			}
 	}
 
 	setUp(scn.inject(constantUsersPerSec(1) during (3 minutes))).protocols(httpProtocol).throttle(

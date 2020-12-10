@@ -146,6 +146,50 @@ class DemostoreSimulation extends Simulation {
 		.pause(2)
 		.exec(Checkout.completeCheckout)
 
+	object UserJourneys {
+		def minPause = 100 milliseconds
+		def maxPause = 500 milliseconds
+
+		def browseStore = {
+			exec(initSession).
+			.exec(CmsPages.homepage)
+				.pause(maxPause)
+				.exec(CmsPages.aboutUs)
+				.pause(minPause, maxPause)
+				.repeat(5) {
+					exec(Catalog.Category.view)
+						.pause(minPause, maxPause)
+						.exec(Catalog.Product.view)
+				}
+		}
+
+		def abandonCart = {
+			exec(initSession)
+				.exec(CmsPages.homepage)
+				.pause(maxPause)
+				.exec(Catalog.Category.view)
+				.pause(minPause, maxPause)
+				.exec(Catalog.Product.view)
+				.pause(minPause, maxPause)
+				.exec(Catalog.Product.add)
+		}
+
+		def completePurchase = {
+			exec(initSession)
+				.exec(CmsPages.homepage)
+				.pause(maxPause)
+				.exec(Catalog.Category.view)
+				.pause(minPause, maxPause)
+				.exec(Catalog.Product.view)
+				.pause(minPause, maxPause)
+				.exec(Catalog.Product.add)
+				.pause(minPause, maxPause)
+				.exec(Checkout.viewCart)
+				.pause(minPause, maxPause)
+				.exec(Checkout.completeCheckout)
+		}
+	}
+
 	setUp(scn.inject(constantUsersPerSec(1) during (3 minutes))).protocols(httpProtocol).throttle(
 		reachRps(10) in (30 seconds),
 		holdFor(60 seconds),

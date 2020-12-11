@@ -58,6 +58,20 @@
           </execution>
         </executions>
       </plugin>
+
+      <plugin>
+        <groupId>io.gatling.frontline</groupId>
+        <artifactId>frontline-maven-plugin</artifactId>
+        <version>1.0.3</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>package</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      
       <plugin>
         <groupId>io.gatling</groupId>
         <artifactId>gatling-maven-plugin</artifactId>

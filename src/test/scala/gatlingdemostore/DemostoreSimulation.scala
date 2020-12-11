@@ -46,7 +46,7 @@ class DemostoreSimulation extends Simulation {
 		.exec(session => session.set("randomNumber", rnd.nextInt))
 		.exec(session => session.set("customerLoggedIn", false))
 		.exec(session => session.set("cartTotal", 0.00))
-		.exec(addCookie(Cookie("sessionId", randomString(10)).withDomain(domain)))
+//		.exec(addCookie(Cookie("sessionId", randomString(10)).withDomain(domain)))
 
 	val scn = scenario("DemostoreSimulation")
 		.exec(initSession)

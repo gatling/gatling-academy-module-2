@@ -43,6 +43,7 @@
               <goal>testCompile</goal>
             </goals>
             <configuration>
+              <recompileMode>all</recompileMode>
               <jvmArgs>
                 <jvmArg>-Xss100M</jvmArg>
               </jvmArgs>

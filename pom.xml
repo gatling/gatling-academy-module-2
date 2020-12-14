@@ -1,18 +1,20 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
   <modelVersion>4.0.0</modelVersion>
-  <groupId>com.myGatlingTest</groupId>
-  <artifactId>myGatlingTest</artifactId>
-  <version>1.0-SNAPSHOT</version>
+
+  <groupId>io.gatling.demo</groupId>
+  <artifactId>gatling-demostore</artifactId>
+  <version>3.4.2</version>
 
   <properties>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
-    <encoding>UTF-8</encoding>
-
-    <gatling.version>3.3.1</gatling.version>
-    <gatling-maven-plugin.version>3.0.5</gatling-maven-plugin.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <gatling.version>${project.version}</gatling.version>
+    <gatling-maven-plugin.version>3.1.0</gatling-maven-plugin.version>
+    <maven-jar-plugin.version>3.2.0</maven-jar-plugin.version>
+    <scala-maven-plugin.version>4.4.0</scala-maven-plugin.version>
   </properties>
 
   <dependencies>
@@ -34,20 +36,16 @@
   </dependencies>
 
   <build>
-    <!-- so that maven compiles src/test/scala and not just src/test/java -->
     <testSourceDirectory>src/test/scala</testSourceDirectory>
     <plugins>
       <plugin>
-        <!-- so that maven can create a jar -->
         <artifactId>maven-jar-plugin</artifactId>
-        <version>3.2.0</version>
+        <version>${maven-jar-plugin.version}</version>
       </plugin>
-
-      <!-- this plugin is so maven can compile your scala code -->
       <plugin>
         <groupId>net.alchim31.maven</groupId>
         <artifactId>scala-maven-plugin</artifactId>
-        <version>4.3.1</version>
+        <version>${scala-maven-plugin.version}</version>
         <executions>
           <execution>
             <goals>
@@ -71,7 +69,6 @@
         </executions>
       </plugin>
 
-      <!-- so maven can build a package for FrontLine -->
       <plugin>
         <groupId>io.gatling.frontline</groupId>
         <artifactId>frontline-maven-plugin</artifactId>
@@ -85,7 +82,6 @@
         </executions>
       </plugin>
 
-      <!-- This plugin allows us to run a gatling test through Maven from the command line -->
       <plugin>
         <groupId>io.gatling</groupId>
         <artifactId>gatling-maven-plugin</artifactId>

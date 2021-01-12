@@ -149,10 +149,10 @@ class DemostoreSimulation extends Simulation {
 	setUp(
 		scn.inject(
 			atOnceUsers(3),
-			nothingFor(5 seconds),
-			rampUsers(10) during (20 seconds),
-			nothingFor(10 seconds),
-			constantUsersPerSec(1) during (20 seconds)
+			nothingFor(5.seconds),
+			rampUsers(10) during (20.seconds),
+			nothingFor(10.seconds),
+			constantUsersPerSec(1) during (20.seconds)
 		).protocols(httpProtocol)
 	)
 }

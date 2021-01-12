@@ -157,8 +157,8 @@ class DemostoreSimulation extends Simulation {
 		.exec(Checkout.completeCheckout)
 
 	object UserJourneys {
-		def minPause = 100 milliseconds
-		def maxPause = 500 milliseconds
+		def minPause = 100.milliseconds
+		def maxPause = 500.milliseconds
 
 		def browseStore = {
 			exec(initSession)

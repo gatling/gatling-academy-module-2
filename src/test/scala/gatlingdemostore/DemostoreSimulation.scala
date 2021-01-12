@@ -8,7 +8,7 @@ import io.gatling.jdbc.Predef._
 
 class DemostoreSimulation extends Simulation {
 
-	val domain = "gatling-demostore.com"
+	val domain = "demostore.gatling.io"
 
 	val httpProtocol = http
 		.baseUrl("https://" + domain)
@@ -29,7 +29,7 @@ class DemostoreSimulation extends Simulation {
 			exec(http("Load About Us Page")
 				.get("/about-us")
 				.check(status.is(200))
-				.check(css("div[class='col-7'] h2").is("About Us"))
+				.check(substring("About Us"))
 			)
 		}
 	}
@@ -41,7 +41,7 @@ class DemostoreSimulation extends Simulation {
 					.exec(http("Load Category Page - ${categoryName}")
 						.get("/category/${categorySlug}")
 						.check(status.is(200))
-						.check(xpath("""//*[@id='CategoryName']""").is("${categoryName}"))
+						.check(css("#CategoryName").is("${categoryName}"))
 					)
 			}
 		}
@@ -53,7 +53,7 @@ class DemostoreSimulation extends Simulation {
 						http("Load Product Page - ${name}")
 							.get("/product/${slug}")
 							.check(status.is(200))
-							.check(css("""div[class='col-8'] div[class='row'] p""").is("${description}"))
+							.check(css("#ProductDescription").is("${description}"))
 					)
 			}
 		}

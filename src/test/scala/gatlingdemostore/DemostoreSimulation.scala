@@ -8,7 +8,7 @@ import io.gatling.jdbc.Predef._
 
 class DemostoreSimulation extends Simulation {
 
-	val domain = "gatling-demostore.com"
+	val domain = "demostore.gatling.io"
 
 	val httpProtocol = http
 		.baseUrl("https://" + domain)
@@ -18,7 +18,7 @@ class DemostoreSimulation extends Simulation {
 			exec(http("Load Home Page")
 				.get("/")
 				.check(status.is(200))
-				.check(regex("""<title>Gatling Demo-Store</title>""").exists)
+				.check(regex("<title>Gatling Demo-Store</title>").exists)
 				.check(css("#_csrf", "content").saveAs("csrfValue")))
 		}
 
@@ -26,7 +26,7 @@ class DemostoreSimulation extends Simulation {
 			exec(http("Load About Us Page")
 				.get("/about-us")
 				.check(status.is(200))
-				.check(css("div[class='col-7'] h2").is("About Us"))
+				.check(substring("About Us"))
 			)
 		}
 	}

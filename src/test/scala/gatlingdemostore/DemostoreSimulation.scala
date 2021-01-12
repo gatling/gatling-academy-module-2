@@ -84,8 +84,8 @@ class DemostoreSimulation extends Simulation {
 						val currentCartTotal = session("cartTotal").as[Double]
 						val itemPrice = session("price").as[Double]
 
-						println(s"""Value of currentCartTotal: ${currentCartTotal}""")
-						println(s"""Value of itemPrice: ${itemPrice}""")
+						println(s"Value of currentCartTotal: ${currentCartTotal}")
+						println(s"Value of itemPrice: ${itemPrice}")
 						session.set("cartTotal", (currentCartTotal + itemPrice))
 					})
 					.exec { session => println(session); session }

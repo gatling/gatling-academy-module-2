@@ -16,7 +16,7 @@ class DemostoreSimulation extends Simulation {
 	val scn = scenario("DemostoreSimulation")
 		.exec(http("Load Home Page")
 			.get("/")
-			.check(regex("""<title>Gatling Demo-Store</title>""").exists)
+			.check(regex("<title>Gatling Demo-Store</title>").exists)
 			.check(css("#_csrf", "content").saveAs("csrfValue")))
 		.pause(2)
 		.exec(http("Load About Us Page")

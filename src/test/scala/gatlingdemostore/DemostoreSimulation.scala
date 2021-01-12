@@ -147,8 +147,8 @@ class DemostoreSimulation extends Simulation {
 		.exec(Checkout.completeCheckout)
 
 	object UserJourneys {
-		def minPause = 100 milliseconds
-		def maxPause = 500 milliseconds
+		def minPause = 100.milliseconds
+		def maxPause = 500.milliseconds
 
 		def browseStore = {
 			exec(initSession)
@@ -192,7 +192,7 @@ class DemostoreSimulation extends Simulation {
 
 	object Scenarios {
 		def default = scenario("Default Load Test")
-			.during(60 seconds) {
+			.during(60.seconds) {
 				randomSwitch(
 					75d -> exec(UserJourneys.browseStore),
 					15d -> exec(UserJourneys.abandonCart),
@@ -201,7 +201,7 @@ class DemostoreSimulation extends Simulation {
 			}
 
 		def highPurchase = scenario("High Purhcase Load Test")
-			.during(60 seconds) {
+			.during(60.seconds) {
 				randomSwitch(
 					25d -> exec(UserJourneys.browseStore),
 					25d -> exec(UserJourneys.abandonCart),
@@ -210,7 +210,7 @@ class DemostoreSimulation extends Simulation {
 			}
 	}
 
-	setUp(scn.inject(constantUsersPerSec(1) during (3 minutes))).protocols(httpProtocol).throttle(
+	setUp(scn.inject(constantUsersPerSec(1) during (3.minutes))).protocols(httpProtocol).throttle(
 		reachRps(10) in (30.seconds),
 		holdFor(60.seconds),
 		jumpToRps(20),

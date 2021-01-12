@@ -9,7 +9,7 @@ import scala.util.Random
 
 class DemostoreSimulation extends Simulation {
 
-	val domain = "gatling-demostore.com"
+	val domain = "demostore.gatling.io"
 
 	val httpProtocol = http
 		.baseUrl("https://" + domain)
@@ -35,7 +35,7 @@ class DemostoreSimulation extends Simulation {
 			exec(http("Load Home Page")
 				.get("/")
 				.check(status.is(200))
-				.check(regex("""<title>Gatling Demo-Store</title>""").exists)
+				.check(regex("<title>Gatling Demo-Store</title>").exists)
 				.check(css("#_csrf", "content").saveAs("csrfValue")))
 		}
 
@@ -43,7 +43,7 @@ class DemostoreSimulation extends Simulation {
 			exec(http("Load About Us Page")
 				.get("/about-us")
 				.check(status.is(200))
-				.check(css("div[class='col-7'] h2").is("About Us"))
+				.check(substring("About Us"))
 			)
 		}
 	}
@@ -55,7 +55,7 @@ class DemostoreSimulation extends Simulation {
 					.exec(http("Load Category Page - ${categoryName}")
 						.get("/category/${categorySlug}")
 						.check(status.is(200))
-						.check(xpath("""//*[@id='CategoryName']""").is("${categoryName}"))
+						.check(css("#CategoryName").is("${categoryName}"))
 					)
 			}
 		}
@@ -67,7 +67,7 @@ class DemostoreSimulation extends Simulation {
 						http("Load Product Page - ${name}")
 							.get("/product/${slug}")
 							.check(status.is(200))
-							.check(css("""div[class='col-8'] div[class='row'] p""").is("${description}"))
+							.check(css("#ProductDescription").is("${description}"))
 					)
 			}
 
@@ -77,7 +77,7 @@ class DemostoreSimulation extends Simulation {
 					http("Add product to cart")
 						.get("/cart/add/${id}")
 						.check(status.is(200))
-						.check(regex("""items in your cart"""))
+						.check(substring("items in your cart"))
 				)
 					.exec(session => {
 						val currentCartTotal = session("cartTotal").as[Double]
@@ -95,7 +95,7 @@ class DemostoreSimulation extends Simulation {
 					http("Load Login Page")
 						.get("/login")
 						.check(status.is(200))
-						.check(regex("""Username:"""))
+						.check(substring("Username:"))
 				)
 				.exec(
 					http("Customer Login Action")
@@ -127,7 +127,7 @@ class DemostoreSimulation extends Simulation {
 				http("Checkout Cart")
 					.get("/cart/checkout")
 					.check(status.is(200))
-					.check(regex("""Thanks for your order! See you soon!"""))
+					.check(substring("Thanks for your order! See you soon!"))
 			)
 		}
 	}
@@ -146,11 +146,11 @@ class DemostoreSimulation extends Simulation {
 		.pause(2)
 		.exec(Checkout.completeCheckout)
 
-	setUp(scn.inject(constantUsersPerSec(1) during (3 minutes))).protocols(httpProtocol).throttle(
-		reachRps(10) in (30 seconds),
-		holdFor(60 seconds),
+	setUp(scn.inject(constantUsersPerSec(1) during (3.minutes))).protocols(httpProtocol).throttle(
+		reachRps(10) in (30.seconds),
+		holdFor(60.seconds),
 		jumpToRps(20),
-		holdFor(60 seconds)
-	).maxDuration(3 minutes)
+		holdFor(60.seconds)
+	).maxDuration(3.minutes)
 
 }

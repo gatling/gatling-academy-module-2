@@ -20,7 +20,7 @@ class DemostoreSimulation extends Simulation {
 			exec(http("Load Home Page")
 				.get("/")
 				.check(status.is(200))
-				.check(regex("""<title>Gatling Demo-Store</title>""").exists)
+				.check(regex("<title>Gatling Demo-Store</title>").exists)
 				.check(css("#_csrf", "content").saveAs("csrfValue")))
 		}
 

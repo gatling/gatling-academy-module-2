@@ -29,7 +29,6 @@ class DemostoreSimulation extends Simulation {
 		.exec(session => session.set("customerLoggedIn", false))
 		.exec(session => session.set("cartTotal", 0.00))
 		.exec(addCookie(Cookie("sessionId", randomString(10)).withDomain(domain)))
-		.exec { session => println(session); session }
 
 	object CmsPages {
 		def homepage = {
@@ -83,12 +82,8 @@ class DemostoreSimulation extends Simulation {
 					.exec(session => {
 						val currentCartTotal = session("cartTotal").as[Double]
 						val itemPrice = session("price").as[Double]
-
-						println(s"Value of currentCartTotal: ${currentCartTotal}")
-						println(s"Value of itemPrice: ${itemPrice}")
 						session.set("cartTotal", (currentCartTotal + itemPrice))
 					})
-					.exec { session => println(session); session }
 			}
 		}
 	}
@@ -102,7 +97,6 @@ class DemostoreSimulation extends Simulation {
 						.check(status.is(200))
 						.check(substring("Username:"))
 				)
-				.exec { session => println(session); session}
 				.exec(
 					http("Customer Login Action")
 						.post("/login")
@@ -112,7 +106,6 @@ class DemostoreSimulation extends Simulation {
 						.check(status.is(200))
 				)
 				.exec(session => session.set("customerLoggedIn", true))
-				.exec { session => println(session); session}
 		}
 	}
 
@@ -153,5 +146,13 @@ class DemostoreSimulation extends Simulation {
 		.pause(2)
 		.exec(Checkout.completeCheckout)
 
-	setUp(scn.inject(atOnceUsers(1))).protocols(httpProtocol)
+	setUp(
+		scn.inject(
+			atOnceUsers(3),
+			nothingFor(5 seconds),
+			rampUsers(10) during (20 seconds),
+			nothingFor(10 seconds),
+			constantUsersPerSec(1) during (20 seconds)
+		).protocols(httpProtocol)
+	)
 }

@@ -83,12 +83,12 @@ class DemostoreSimulation extends Simulation {
 
 			def add = {
 				exec(view)
-				.exec(
-					http("Add product to cart")
-						.get("/cart/add/${id}")
-						.check(status.is(200))
-						.check(substring("items in your cart"))
-				)
+					.exec(
+						http("Add product to cart")
+							.get("/cart/add/${id}")
+							.check(status.is(200))
+							.check(substring("items in your cart"))
+					)
 					.exec(session => {
 						val currentCartTotal = session("cartTotal").as[Double]
 						val itemPrice = session("price").as[Double]
@@ -124,12 +124,12 @@ class DemostoreSimulation extends Simulation {
 			doIf(session => !session("customerLoggedIn").as[Boolean]) {
 				exec(Customer.login)
 			}
-			.exec(
-				http("Load Cart Page")
-					.get("/cart/view")
-					.check(status.is(200))
-					.check(css("#grandTotal").is("$$${cartTotal}"))
-			)
+				.exec(
+					http("Load Cart Page")
+						.get("/cart/view")
+						.check(status.is(200))
+						.check(css("#grandTotal").is("$$${cartTotal}"))
+				)
 		}
 
 		def completeCheckout = {
@@ -162,7 +162,7 @@ class DemostoreSimulation extends Simulation {
 
 		def browseStore = {
 			exec(initSession)
-			.exec(CmsPages.homepage)
+				.exec(CmsPages.homepage)
 				.pause(maxPause)
 				.exec(CmsPages.aboutUs)
 				.pause(minPause, maxPause)
@@ -220,11 +220,8 @@ class DemostoreSimulation extends Simulation {
 			}
 	}
 
-	setUp(
-		Scenarios.default
-			.inject(rampUsers(userCount) during (rampDuration.seconds)).protocols(httpProtocol),
-		Scenarios.highPurchase
-					.inject(rampUsers(5) during (10.seconds)).protocols(httpProtocol)
-	)
+	setUp(Scenarios.default
+		.inject(rampUsers(userCount) during (rampDuration.seconds))
+		.protocols(httpProtocol))
 
 }

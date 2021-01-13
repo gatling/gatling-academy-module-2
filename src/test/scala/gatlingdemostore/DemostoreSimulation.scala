@@ -147,8 +147,8 @@ class DemostoreSimulation extends Simulation {
 		.exec(Checkout.completeCheckout)
 
 	object UserJourneys {
-		def minPause = 100 milliseconds
-		def maxPause = 500 milliseconds
+		def minPause = 100.milliseconds
+		def maxPause = 500.milliseconds
 
 		def browseStore = {
 			exec(initSession).
@@ -190,7 +190,7 @@ class DemostoreSimulation extends Simulation {
 		}
 	}
 
-	setUp(scn.inject(constantUsersPerSec(1) during (3 minutes))).protocols(httpProtocol).throttle(
+	setUp(scn.inject(constantUsersPerSec(1) during (3.minutes))).protocols(httpProtocol).throttle(
 		reachRps(10) in (30.seconds),
 		holdFor(60.seconds),
 		jumpToRps(20),

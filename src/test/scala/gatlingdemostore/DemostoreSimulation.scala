@@ -146,11 +146,9 @@ class DemostoreSimulation extends Simulation {
 		.pause(2)
 		.exec(Checkout.completeCheckout)
 
-	setUp(scn.inject(constantUsersPerSec(1) during (3.minutes))).protocols(httpProtocol).throttle(
-		reachRps(10) in (30.seconds),
-		holdFor(60.seconds),
-		jumpToRps(20),
-		holdFor(60.seconds)
-	).maxDuration(3.minutes)
+	setUp(scn.inject(
+		constantConcurrentUsers(10) during (20.seconds),
+		rampConcurrentUsers(10) to (20) during (20.seconds)
+	)).protocols(httpProtocol)
 
 }

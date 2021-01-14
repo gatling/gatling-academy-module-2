@@ -11,9 +11,9 @@ class DemostoreSimulation extends Simulation {
 	val domain = "demostore.gatling.io"
 
 	val httpProtocol = http
-		.baseUrl("https://" + domain)
+		.baseUrl("http://" + domain)
 
-	val scn = scenario("DemostoreSimulation")
+	val scn = scenario("RecordedSimulation")
 		.exec(http("Load Home Page")
 			.get("/")
 			.check(regex("<title>Gatling Demo-Store</title>").exists)
@@ -22,7 +22,7 @@ class DemostoreSimulation extends Simulation {
 		.exec(http("Load About Us Page")
 			.get("/about-us"))
 		.pause(2)
-		.exec(http("Load All Categories Page")
+		.exec(http("Load Categories Page")
 			.get("/category/all"))
 		.pause(2)
 		.exec(http("Load Product Page")

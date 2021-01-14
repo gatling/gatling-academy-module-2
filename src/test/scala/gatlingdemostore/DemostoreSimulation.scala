@@ -11,7 +11,7 @@ class DemostoreSimulation extends Simulation {
 	val domain = "demostore.gatling.io"
 
 	val httpProtocol = http
-		.baseUrl("https://" + domain)
+		.baseUrl("http://" + domain)
 
 	object CmsPages {
 		def homepage = {
@@ -31,12 +31,12 @@ class DemostoreSimulation extends Simulation {
 		}
 	}
 
-	val scn = scenario("DemostoreSimulation")
+	val scn = scenario("RecordedSimulation")
 		.exec(CmsPages.homepage)
 		.pause(2)
 		.exec(CmsPages.aboutUs)
 		.pause(2)
-		.exec(http("Load All Categories Page")
+		.exec(http("Load Categories Page")
 			.get("/category/all"))
 		.pause(2)
 		.exec(http("Load Product Page")

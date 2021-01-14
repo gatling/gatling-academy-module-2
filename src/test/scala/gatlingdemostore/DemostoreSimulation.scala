@@ -11,7 +11,7 @@ class DemostoreSimulation extends Simulation {
 	val domain = "demostore.gatling.io"
 
 	val httpProtocol = http
-		.baseUrl("https://" + domain)
+		.baseUrl("http://" + domain)
 
 	val categoryFeeder = csv("data/categoryDetails.csv").random
 
@@ -46,7 +46,7 @@ class DemostoreSimulation extends Simulation {
 		}
 	}
 
-	val scn = scenario("DemostoreSimulation")
+	val scn = scenario("RecordedSimulation")
 		.exec(CmsPages.homepage)
 		.pause(2)
 		.exec(CmsPages.aboutUs)

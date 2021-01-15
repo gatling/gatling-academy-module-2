@@ -49,17 +49,16 @@ class DemostoreSimulation extends Simulation {
 		object Product {
 			def view = {
 				feed(jsonFeederProducts)
-					.exec(
-						http("Load Product Page - ${name}")
-							.get("/product/${slug}")
-							.check(status.is(200))
-							.check(css("#ProductDescription").is("${description}"))
+					.exec(http("Load Product Page - ${name}")
+						.get("/product/${slug}")
+						.check(status.is(200))
+						.check(css("#ProductDescription").is("${description}"))
 					)
 			}
 		}
 	}
 
-	val scn = scenario("DemostoreSimulation")
+	val scn = scenario("RecordedSimulation")
 		.exec(CmsPages.homepage)
 		.pause(2)
 		.exec(CmsPages.aboutUs)

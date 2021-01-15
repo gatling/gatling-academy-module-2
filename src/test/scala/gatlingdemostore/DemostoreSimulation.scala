@@ -8,7 +8,7 @@ import io.gatling.jdbc.Predef._
 
 class DemostoreSimulation extends Simulation {
 
-	val domain = "gatling-demostore.com"
+	val domain = "demostore.gatling.io"
 
 	val httpProtocol = http
 		.baseUrl("https://" + domain)
@@ -49,22 +49,20 @@ class DemostoreSimulation extends Simulation {
 		object Product {
 			def view = {
 				feed(jsonFeederProducts)
-					.exec(
-						http("Load Product Page - ${name}")
-							.get("/product/${slug}")
-							.check(status.is(200))
-							.check(css("#ProductDescription").is("${description}"))
+					.exec(http("Load Product Page - ${name}")
+						.get("/product/${slug}")
+						.check(status.is(200))
+						.check(css("#ProductDescription").is("${description}"))
 					)
 			}
 
 			def add = {
-				exec(view)
-				.exec(
-					http("Add product to cart")
+				exec(view).
+					exec(http("Add Product to Cart")
 						.get("/cart/add/${id}")
 						.check(status.is(200))
 						.check(substring("items in your cart"))
-				)
+					)
 			}
 		}
 	}
@@ -79,7 +77,7 @@ class DemostoreSimulation extends Simulation {
 		}
 	}
 
-	val scn = scenario("DemostoreSimulation")
+	val scn = scenario("RecordedSimulation")
 		.exec(CmsPages.homepage)
 		.pause(2)
 		.exec(CmsPages.aboutUs)

@@ -63,22 +63,20 @@ class DemostoreSimulation extends Simulation {
 		object Product {
 			def view = {
 				feed(jsonFeederProducts)
-					.exec(
-						http("Load Product Page - ${name}")
-							.get("/product/${slug}")
-							.check(status.is(200))
-							.check(css("#ProductDescription").is("${description}"))
+					.exec(http("Load Product Page - ${name}")
+						.get("/product/${slug}")
+						.check(status.is(200))
+						.check(css("#ProductDescription").is("${description}"))
 					)
 			}
 
 			def add = {
-				exec(view)
-				.exec(
-					http("Add product to cart")
+				exec(view).
+					exec(http("Add Product to Cart")
 						.get("/cart/add/${id}")
 						.check(status.is(200))
 						.check(substring("items in your cart"))
-				)
+					)
 					.exec(session => {
 						val currentCartTotal = session("cartTotal").as[Double]
 						val itemPrice = session("price").as[Double]
@@ -114,12 +112,12 @@ class DemostoreSimulation extends Simulation {
 			doIf(session => !session("customerLoggedIn").as[Boolean]) {
 				exec(Customer.login)
 			}
-			.exec(
-				http("Load Cart Page")
-					.get("/cart/view")
-					.check(status.is(200))
-					.check(css("#grandTotal").is("$$${cartTotal}"))
-			)
+				.exec(
+					http("Load Cart Page")
+						.get("/cart/view")
+						.check(status.is(200))
+						.check(css("#grandTotal").is("$$${cartTotal}"))
+				)
 		}
 
 		def completeCheckout = {
@@ -132,7 +130,7 @@ class DemostoreSimulation extends Simulation {
 		}
 	}
 
-	val scn = scenario("DemostoreSimulation")
+	val scn = scenario("RecordedSimulation")
 		.exec(initSession)
 		.exec(CmsPages.homepage)
 		.pause(2)

@@ -151,7 +151,7 @@ class DemostoreSimulation extends Simulation {
 		def maxPause = 500.milliseconds
 
 		def browseStore = {
-			exec(initSession).
+			exec(initSession)
 			.exec(CmsPages.homepage)
 				.pause(maxPause)
 				.exec(CmsPages.aboutUs)

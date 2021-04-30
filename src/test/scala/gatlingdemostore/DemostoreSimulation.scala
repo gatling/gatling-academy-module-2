@@ -9,7 +9,7 @@ import io.gatling.jdbc.Predef._
 class DemostoreSimulation extends Simulation {
 
 	val httpProtocol = http
-		.baseUrl("https://demostore-gatling.io")
+		.baseUrl("https://demostore.gatling.io")
 		.inferHtmlResources(BlackList(""".*\.js""", """.*\.css""", """.*\.gif""", """.*\.jpeg""", """.*\.jpg""", """.*\.ico""", """.*\.woff""", """.*\.woff2""", """.*\.(t|o)tf""", """.*\.png""", """.*detectportal\.firefox\.com.*"""), WhiteList())
 		.acceptHeader("text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9")
 		.acceptEncodingHeader("gzip, deflate")
@@ -71,7 +71,7 @@ class DemostoreSimulation extends Simulation {
 			.headers(headers_6)
 			.formParam("_csrf", "497b3e3d-0067-445c-8452-98e9fabe037c")
 			.formParam("username", "user1")
-			.formParam("password", "password1"))
+			.formParam("password", "pass"))
 		.pause(7)
 		.exec(http("request_7")
 			.get("/cart/checkout")

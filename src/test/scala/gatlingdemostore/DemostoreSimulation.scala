@@ -52,7 +52,7 @@ class DemostoreSimulation extends Simulation {
 			.post("/login")
 			.formParam("_csrf", "${csrfValue}")
 			.formParam("username", "user1")
-			.formParam("password", "password1"))
+			.formParam("password", "pass"))
 		.pause(2)
 		.exec(http("Checkout")
 			.get("/cart/checkout"))
